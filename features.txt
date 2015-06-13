@@ -1,0 +1,9 @@
+
+/*
+// Feature list
+1. Dragging helper
+2. Related card (for multiple platforms, or dependency if any)
+3. Search on current board
+4. Disable cover photo, show lastest comment instead
+5. Slack command
+*/
