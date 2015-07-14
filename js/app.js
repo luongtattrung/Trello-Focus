@@ -55,7 +55,7 @@ var fetchLatestComments = function(){
     }, function(){
       console.log("err")
       // Retry
-      // fetchLatestComments();
+      fetchLatestComments();
     });
   }
   // Trello.members.get("me", function(member){
