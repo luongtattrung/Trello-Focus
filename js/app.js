@@ -1,28 +1,31 @@
-var TRELLO_KEY = "19536d20291f823a1e48f9ade3c8563f"
-var TRELLO_SECRET = "04e813e9951ba2f4f95a0794515e2e91c9a3add2a68c1a72940f69a1bdb3e1e8"
+// var TRELLO_KEY = "19536d20291f823a1e48f9ade3c8563f"
+// var TRELLO_SECRET = "04e813e9951ba2f4f95a0794515e2e91c9a3add2a68c1a72940f69a1bdb3e1e8"
 
 var username = "";
 var filteredComments = undefined;
 // Authorization
 var onAuthorize = function() {
+  console.log("authorize success")
     Trello.members.get("me", function(member){
-        console.log(member);
         username = member.username
       });
-    console.log("authorize completed");
 };
-Trello.authorize({
-    type: "popup",
-    success: onAuthorize
-});
+if(window.location.pathname.indexOf("authorize") == -1){
+  Trello.authorize({
+      type: "popup",
+      name: "Trello Focus",
+      expiration: "1day",
+      success: onAuthorize
+  });
+}
 
 // Fetch comments to show on card
 var fetchLatestComments = function(){
   var url = document.URL;
   var boardId = getIdBoardFromUrl(url);
   if (boardId){
-    // Fetch 100 latest comments on board
-    Trello.get("boards/" + boardId + "/actions", {filter: "commentCard", fields: "data,date", limit: 100}, function(comments){
+    // Fetch 200 latest comments on board
+    Trello.get("boards/" + boardId + "/actions", {filter: "commentCard", fields: "data,date", limit: 200}, function(comments){
       // Sort by date asd
       comments.sort(function(a,b){a.date < b.date})
 
@@ -40,17 +43,19 @@ var fetchLatestComments = function(){
           filteredComments.push(comments[i])
         }
       }
-      console.log(filteredComments.length + " comments to show")
 
       // Try insert comments until there is data to insert
       var tryInsertCommentsTimer = setInterval(function () {
-        console.log("try insert")
         if (showLatestComments()){
           window.clearInterval(tryInsertCommentsTimer)
         }
+        // Try show cover photo
+        $(".list-card-cover[style]").css("display", "block")
       }, 100);
     }, function(){
       console.log("err")
+      // Retry
+      // fetchLatestComments();
     });
   }
   // Trello.members.get("me", function(member){
@@ -58,18 +63,13 @@ var fetchLatestComments = function(){
   // });
 };
 
-$(window).on('hashchange', function () {
-  console.log("hash changed")
-  fetchLatestComments();
-});
-
 // Show latest comment on card
 var showLatestComments = function(){
   // Add lasted comment to cards
   var inserted = false;
   $(".latest-comment").remove();
   for (var i = 0; i < filteredComments.length; i++){
-    var cardTitle = $(".list-card-title:contains('" + filteredComments[i].data.card.name + "')");
+    var cardTitle = $(".list-card-title[href^='/c/" + filteredComments[i].data.card.shortLink + "']");
     $('<div class="action-comment markeddown latest-comment">' + filteredComments[i].memberCreator.username + ": " + filteredComments[i].data.text + '</div>').highlight("@"+username).insertAfter(cardTitle);
     if (cardTitle.length > 0){
       inserted = true
@@ -81,17 +81,18 @@ var showLatestComments = function(){
 // Fetch data on load
 fetchLatestComments();
 
+// Update comment when location change (change board or open card)
 var storedLocation = window.location.pathname;
 window.setInterval(function () {
     if (window.location.pathname != storedLocation) {
         storedLocation = window.location.pathname;
-        console.log("location change")
         fetchLatestComments();
     }
 }, 100);
 
 $(document).ready(function() {
-  console.log( "onhashchange" in window)
+    // Try show cover photo
+    $(".list-card-cover[style]").css("display", "block")
 });
 
 // var isDragging = false;

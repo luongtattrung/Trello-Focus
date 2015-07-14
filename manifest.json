@@ -1,15 +1,7 @@
 {
-  "name": "My Trello",
-  "description": "Add up features to Trello",
+  "name": "Trello Focus",
+  "description": "Add up and reduce features, to make it more productive while using Trello",
   "version": "0.1",
-  // "permissions": [
-  //   "tabs", "http://*/*", "https://*/*"
-  // ],
-  "browser_action": {
-      "default_title": "Trello extension",
-      "default_icon": "icon.png",
-      "default_popup": "popup.html"
-  },
   "content_scripts": [
     {
       "matches": ["https://trello.com/*"],
@@ -21,5 +13,8 @@
       "js/app.js"]
     }
   ],
+  "icons": { "16": "icon16.png",
+         "48": "icon48.png",
+        "128": "icon128.png" },
   "manifest_version": 2
 }

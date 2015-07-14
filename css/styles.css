@@ -1,8 +1,10 @@
-.small-list-card-cover{
+.list-card-cover{
+  z-index: 99999;
+  display: none;
   border: 3px solid white;
   position: absolute;
   left: 0;
-  top: 0;
+  bottom: 0;
   width: 30px !important;
   height: 30px !important;
   box-shadow: 0 1px 2px rgba(0,0,0,.23);
@@ -18,4 +20,7 @@
 .latest-comment{
   background-color: #E2E4E6 !important;
   padding: 5px;
+}
+.hidden{
+  display: none !important;
 }
