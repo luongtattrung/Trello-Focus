@@ -1,7 +1,8 @@
 {
   "name": "Trello Focus",
-  "description": "Add up and reduce features, to make it more productive while using Trello",
-  "version": "0.1",
+  "description": "Bug fixes & better display of comments",
+  "version": "0.8",
+  "permissions": ["storage"],
   "content_scripts": [
     {
       "matches": ["https://trello.com/*"],
@@ -9,7 +10,6 @@
       "js": [
       "js/libs/jquery-2.1.4.min.js",
       "js/libs/jquery.highlight.js",
-      "js/libs/trello-client.js",
       "js/app.js"]
     }
   ],
